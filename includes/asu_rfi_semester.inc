@@ -23,30 +23,8 @@ function asu_rfi_semester()
    print json_encode($data);
 }
 
-function asu_rfi_semester_ajax_callback(){
-  $plancode = arg(2);
-  $xmldata = xmlrpc('https://webapp4.asu.edu/programs/XmlRpcServer', array('eAdvisorDSFind.findDegreeByAcadPlanMapArray' => array($plancode)));
-  $terms = $xmldata[0]['planDeadlines'];
-  // print "<pre>"; print_r($xmldata[0]); print "</pre>";
-  foreach($terms as $skey=>$svalue){
-    $sem_code = explode(":",$skey);
-    $sem_value = explode(":",$svalue);
-    $semes[$sem_code[2]] = $sem_value[0];
-  }
-  
-  //Get semester dates from dabatase
-  $semdates_query = db_query("select * from {asu_rfi_sem_dates} order by CHAR_LENGTH(semId)");
-  foreach ($semdates_query as $semester) {
-    $termdate[$semester->semId] = $semester->semLabel;
-  }
-  
-  if (!empty($termdate)) {
-    $sem_dates_array = array_intersect($termdate, $semes);
-  } else {
-    $sem_dates_array = $semes;
-  }
-  return $sem_dates_array;
-}
+
+
 
 function _asu_rfi_semester(){
   $plancode = arg(2);
